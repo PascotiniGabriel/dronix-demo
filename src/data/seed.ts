@@ -1,0 +1,50 @@
+import type { Dados } from '@/types'
+import { criarClientes, criarEquipamentos, EMPRESA, SERVICOS, USUARIOS } from './pessoas'
+import { criarProdutos, MODELOS } from './produtos'
+import { criarComercial } from './comercial'
+import { criarCotacoes, criarFornecedores } from './compras'
+import { criarChamados } from './chamados'
+import { PLANOS_SUPORTE, suporteDoCliente, chamadoUsoAlto } from './suporte'
+import { criarCompromissos } from './agenda'
+import { CHECKLIST_ATENDIMENTO } from './checklists'
+import { LOCAIS_CLIENTES, OS_CAMPO } from './locais'
+import { distribuirEmpresas } from './empresas'
+import { criarLancamentos, criarMovimentacoes, criarNotas } from './financeiro'
+
+export { diasAtras, diasAFrente, criarPRNG } from './util'
+
+/** Dados de demonstração, determinísticos e com datas relativas a hoje. Tudo fictício. */
+export function criarDadosDemo(): Dados {
+  const produtos = criarProdutos()
+  const clientes = criarClientes()
+  const { orcamentos, ordens, leads, conversas } = criarComercial(produtos, SERVICOS)
+  return distribuirEmpresas({
+    empresa: {
+      ...EMPRESA, unidades: [...EMPRESA.unidades],
+      checklistAtendimento: { campo: [...CHECKLIST_ATENDIMENTO.campo], oficina: [...CHECKLIST_ATENDIMENTO.oficina] },
+      planosSuporte: PLANOS_SUPORTE.map((p) => ({ ...p })),
+    },
+    usuarios: USUARIOS.map((u) => ({ ...u })),
+    modelos: MODELOS.map((m) => ({ ...m })),
+    produtos,
+    movimentacoes: criarMovimentacoes(produtos),
+    servicos: SERVICOS.map((s) => ({ ...s, checklist: [...(s.checklist ?? [])] })),
+    clientes: clientes.map((c) => ({ ...c, suporte: suporteDoCliente(c.id), ...(LOCAIS_CLIENTES[c.id] ? { locais: LOCAIS_CLIENTES[c.id].map((l) => ({ ...l })) } : {}) })),
+    equipamentos: criarEquipamentos(),
+    orcamentos,
+    ordens: ordens.map((o) => {
+      const campo = OS_CAMPO[o.id]
+      const local = campo ? LOCAIS_CLIENTES[campo[0]]?.[campo[1]] : undefined
+      return campo && local ? { ...o, atendimento: 'campo' as const, local: { ...local } } : { ...o, atendimento: 'oficina' as const }
+    }),
+    notas: criarNotas(produtos, SERVICOS, clientes),
+    lancamentos: criarLancamentos(clientes),
+    leads,
+    conversas,
+    compromissos: criarCompromissos(),
+    fornecedores: criarFornecedores(),
+    cotacoes: criarCotacoes(),
+    chamados: [...criarChamados(), chamadoUsoAlto()],
+    empresas: [],
+  })
+}

@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-tema="escuro"], [data-tema="escuro"] *));
+
+@theme {
+  --color-nevoa: #F3F6F4;
+  --color-papel: #FFFFFF;
+  --color-mata: #10231C;
+  --color-mata-suave: #4B5F56;
+  --color-mata-claro: #1B3A2E;
+  --color-barra: #10231C;
+  --color-forte: #10231C;
+  --color-serie-escura: #10231C;
+  --color-lavoura: #1F8A4C;
+  --color-lavoura-escuro: #17703D;
+  --color-lavoura-claro: #E3F3EA;
+  --color-lavoura-texto: #17703D;
+  --color-ceu: #1E78C8;
+  --color-ceu-claro: #E4F0FA;
+  --color-ceu-texto: #14578F;
+  --color-ambar: #D99A00;
+  --color-ambar-claro: #FCF3DB;
+  --color-ambar-texto: #7A5600;
+  --color-barro: #C8402F;
+  --color-barro-claro: #FBE7E4;
+  --color-barro-texto: #9A2D20;
+  --color-linha: #DDE5E0;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --radius-campo: 6px;
+  --radius-painel: 10px;
+}
+
+/* Tema escuro: só redefine os tokens. A barra lateral usa --color-barra e os botões fortes --color-forte. */
+:root { color-scheme: light; }
+:root[data-tema="escuro"] {
+  color-scheme: dark;
+  --color-nevoa: #0E1714;
+  --color-papel: #15211C;
+  --color-mata: #E6EEEA;
+  --color-mata-suave: #9DB0A7;
+  --color-mata-claro: #C9D8D1;
+  --color-barra: #0A110E;
+  --color-forte: #2C4A3D;
+  --color-serie-escura: #8FA79B;
+  --color-lavoura: #1F8A4C;
+  --color-lavoura-escuro: #17703D;
+  --color-lavoura-claro: #143324;
+  --color-lavoura-texto: #4CC27D;
+  --color-ceu: #4DA3EA;
+  --color-ceu-claro: #13293D;
+  --color-ceu-texto: #8CC4F2;
+  --color-ambar: #E3A91A;
+  --color-ambar-claro: #33290D;
+  --color-ambar-texto: #F0C45A;
+  --color-barro: #D14B3A;
+  --color-barro-claro: #3A1C18;
+  --color-barro-texto: #F2958A;
+  --color-linha: #2A3B34;
+}
+/* Folhas de documento (orçamento, relatório, catálogo, etiqueta) ficam sempre claras. */
+:root[data-tema="escuro"] .folha-claro {
+  color-scheme: light;
+  --color-nevoa: #F3F6F4;
+  --color-papel: #FFFFFF;
+  --color-mata: #10231C;
+  --color-mata-suave: #4B5F56;
+  --color-mata-claro: #1B3A2E;
+  --color-barra: #10231C;
+  --color-forte: #10231C;
+  --color-serie-escura: #10231C;
+  --color-lavoura: #1F8A4C;
+  --color-lavoura-escuro: #17703D;
+  --color-lavoura-claro: #E3F3EA;
+  --color-lavoura-texto: #17703D;
+  --color-ceu: #1E78C8;
+  --color-ceu-claro: #E4F0FA;
+  --color-ceu-texto: #14578F;
+  --color-ambar: #D99A00;
+  --color-ambar-claro: #FCF3DB;
+  --color-ambar-texto: #7A5600;
+  --color-barro: #C8402F;
+  --color-barro-claro: #FBE7E4;
+  --color-barro-texto: #9A2D20;
+  --color-linha: #DDE5E0;
+}
+
+@layer base {
+  html { font-family: var(--font-sans); background: var(--color-nevoa); color: var(--color-mata); -webkit-text-size-adjust: 100%; }
+  body { margin: 0; min-height: 100dvh; background: var(--color-nevoa); font-stretch: 100%; font-weight: 400; }
+  h1, h2, h3, .titulo { font-stretch: 112%; font-weight: 600; letter-spacing: -0.005em; }
+  button, [role="button"], a, select, input[type="checkbox"] { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  input, textarea, select, button { font: inherit; }
+  code, kbd, .serial { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.92em; }
+  table, .num { font-variant-numeric: tabular-nums; }
+  :focus-visible { outline: 2px solid var(--color-ceu); outline-offset: 2px; border-radius: 4px; }
+}
+
+/* Assinatura da IA: somente em elementos de IA */
+.ia-gradiente { background-image: linear-gradient(135deg, var(--color-lavoura), var(--color-ceu)); color: #fff; }
+.ia-borda {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(var(--color-papel), var(--color-papel)) padding-box,
+    linear-gradient(135deg, var(--color-lavoura), var(--color-ceu)) border-box;
+}
+
+.anim-entrar { animation: entrar 0.18s ease-out; }
+@keyframes entrar { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes deslizar { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.anim-deslizar { animation: deslizar 0.2s ease-out; }
+@keyframes menu { from { transform: translateX(-24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.anim-menu { animation: menu 0.2s ease-out; }
+@keyframes pulso { 0%,100% { opacity: 1 } 50% { opacity: .45 } }
+.anim-pulso { animation: pulso 1.2s ease-in-out infinite; }
+
+
+@media print {
+  :root, :root[data-tema="escuro"] {
+    color-scheme: light;
+  --color-nevoa: #F3F6F4;
+  --color-papel: #FFFFFF;
+  --color-mata: #10231C;
+  --color-mata-suave: #4B5F56;
+  --color-mata-claro: #1B3A2E;
+  --color-barra: #10231C;
+  --color-forte: #10231C;
+  --color-serie-escura: #10231C;
+  --color-lavoura: #1F8A4C;
+  --color-lavoura-escuro: #17703D;
+  --color-lavoura-claro: #E3F3EA;
+  --color-lavoura-texto: #17703D;
+  --color-ceu: #1E78C8;
+  --color-ceu-claro: #E4F0FA;
+  --color-ceu-texto: #14578F;
+  --color-ambar: #D99A00;
+  --color-ambar-claro: #FCF3DB;
+  --color-ambar-texto: #7A5600;
+  --color-barro: #C8402F;
+  --color-barro-claro: #FBE7E4;
+  --color-barro-texto: #9A2D20;
+  --color-linha: #DDE5E0;
+  }
+  @page { size: A4; margin: 12mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+  .nao-imprimir { display: none !important; }
+  .casca-app { display: block !important; }
+  .casca-app > aside, .casca-app > header, .casca-app nav { display: none !important; }
+  .casca-app main { padding: 0 !important; max-width: none !important; margin: 0 !important; }
+  .folha-impressao {
+    display: block !important; position: static; width: 100%; background: #fff; color: #000;
+    box-shadow: none; border: none; padding: 0; margin: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
